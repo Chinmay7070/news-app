@@ -1,12 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
+import Register from "./pages/Register";
 
 function App() {
-  return (
-     <div>
-      <h1>News App</h1>
-    </div>
-  );
+    return (
+        <div>
+            <Register />
+        </div>
+    );
 }
 
 export default App;
