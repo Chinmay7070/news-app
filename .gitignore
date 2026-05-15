@@ -1,0 +1,10 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Frontend node_modules
+frontend/news-frontend/node_modules/
+frontend/news-frontend/build/
+
+# Backend target folders
+backend/*/target/
