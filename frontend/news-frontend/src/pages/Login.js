@@ -21,7 +21,6 @@ function Login() {
             setIsError(false);
             setMessage("Login successful!");
             localStorage.setItem("token", response.data);
-
         } catch (error) {
             setIsError(true);
             setMessage("Invalid email or password!");
