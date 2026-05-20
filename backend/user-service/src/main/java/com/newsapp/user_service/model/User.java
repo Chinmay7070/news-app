@@ -32,6 +32,15 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @Column(name = "is_verified")
+    private boolean isVerified;
+
+    @Column(name = "opt")
+    private String otp;
+
+    @Column(name = "otp_expiry")
+    private LocalDateTime otpExpiry;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }
