@@ -20,22 +20,31 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtServiceImpl jwtService;
+    private final EmailService emailService;
 
     @Override
     public String resiter(RegisterRequest request) {
 
-        if (userRepository.existesByEmail(request.getEmail())){
+        if (userRepository.existsByEmail(request.getEmail())){
             return "Email already existes";
         }
+        String otp = String.valueOf(
+                (int)(Math.random() * 900000) + 100000
+        );
 
        User user = User.builder()
                .name(request.getName())
                .email(request.getEmail())
                .password(bCryptPasswordEncoder.encode(request.getPassword()))
                .role("FREE")
+               .isVerified(false)
+               .otp(otp)
+               .otpExpiry(LocalDateTime.now().plusMinutes(5))
                .createdAt(LocalDateTime.now())
                .build();
         userRepository.save(user);
+
+        emailService.sendOtpEmail(request.getEmail(), otp);
 
         return "User registered successfully";
     }
