@@ -35,7 +35,7 @@ public class User {
     @Column(name = "is_verified")
     private boolean isVerified;
 
-    @Column(name = "opt")
+    @Column(name = "otp")
     private String otp;
 
     @Column(name = "otp_expiry")
@@ -44,3 +44,6 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }
+
+
+
