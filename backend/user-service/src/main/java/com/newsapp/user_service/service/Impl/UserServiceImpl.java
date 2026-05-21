@@ -62,6 +62,9 @@ public class UserServiceImpl implements IUserService {
         if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
             return "Invalid password";
         }
+        if (!user.isVerified()) {
+            return "Please verify your email first!";
+        }
 
         String token = jwtService.generateToken(user.getEmail(),user.getRole());
         return token;
