@@ -1,18 +1,32 @@
 server:
   port: 8081
+
 spring:
   application:
     name: user-service
+
   datasource:
     url: jdbc:mysql://localhost:3306/newsapp_users
     username: root
-    password: Chinmay@1234
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-# JWT
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
-  secret=newsapp_secret_key_which_is_very_long_for_security
-  expiration=86400000
+  secret: ${JWT_SECRET}
+  expiration: 86400000
