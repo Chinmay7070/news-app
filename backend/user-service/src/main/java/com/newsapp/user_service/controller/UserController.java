@@ -2,6 +2,7 @@ package com.newsapp.user_service.controller;
 
 import com.newsapp.user_service.dto.LoginRequest;
 import com.newsapp.user_service.dto.RegisterRequest;
+import com.newsapp.user_service.dto.VerifyOtpRequest;
 import com.newsapp.user_service.service.IUserService;
 import com.newsapp.user_service.service.Impl.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -28,6 +29,12 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
         String result = userService.login(request);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<String> verifyotp(@Valid @RequestBody VerifyOtpRequest request){
+        String result = userService.verifyOtp(request);
         return ResponseEntity.ok(result);
     }
 

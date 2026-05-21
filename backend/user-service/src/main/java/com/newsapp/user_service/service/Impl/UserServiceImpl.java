@@ -2,6 +2,7 @@ package com.newsapp.user_service.service.Impl;
 
 import com.newsapp.user_service.dto.LoginRequest;
 import com.newsapp.user_service.dto.RegisterRequest;
+import com.newsapp.user_service.dto.VerifyOtpRequest;
 import com.newsapp.user_service.model.User;
 import com.newsapp.user_service.repository.UserRepository;
 import com.newsapp.user_service.service.IUserService;
@@ -66,4 +67,29 @@ public class UserServiceImpl implements IUserService {
         return token;
 
     }
+
+    @Override
+    public String verifyOtp(VerifyOtpRequest request) {
+
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+        if (optionalUser.isEmpty()){
+            return "user not found";
+        }
+        User user = optionalUser.get();
+
+        if (!user.getOtp().equals(request.getOtp())) {
+            return "Invalid OTP";
+        }
+
+        if(user.getOtpExpiry().isBefore(LocalDateTime.now())){
+            return "otp expired";
+        }
+        user.setVerified(true);
+        user.setOtp(null);
+        user.setOtpExpiry(null);
+        userRepository.save(user);
+
+        return "Email verified successfully!";
+    }
+
 }
