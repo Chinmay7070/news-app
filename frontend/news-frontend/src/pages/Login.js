@@ -12,21 +12,40 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        try {
-            const response = await api.post("/api/user/login", {
-                email: email,
-                password: password
-            });
-            setIsError(false);
-            setMessage("Login successful!");
-            localStorage.setItem("token", response.data);
-        } catch (error) {
-            setIsError(true);
-            setMessage("Invalid email or password!");
-        }
-    };
+  const handleLogin = async () => {
 
+    if (!email || !password) {
+        setIsError(true);
+        setMessage("All fields are required!");
+        return;
+    }
+
+    try {
+        const response = await api.post("/api/user/login", {
+            email: email,
+            password: password
+        });
+
+        const data = response.data;
+
+        // Token check करो
+        // JWT Token "eyJ" ने सुरू होतो!
+        if (!data.startsWith("eyJ")) {
+            setIsError(true);
+            setMessage(data);
+            return;
+        }
+
+        // Token save करो आणि Home ला जा
+        localStorage.setItem("token", data);
+        setIsError(false);
+        navigate("/home");
+
+    } catch (error) {
+        setIsError(true);
+        setMessage("Something went wrong!");
+    }
+};
     return (
         <div className="login-container">
             <div className="login-card">
