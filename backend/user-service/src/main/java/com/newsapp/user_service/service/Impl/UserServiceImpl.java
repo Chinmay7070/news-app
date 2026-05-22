@@ -46,8 +46,7 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
 
         emailService.sendOtpEmail(request.getEmail(), otp);
-
-        return "User registered successfully";
+        return "OTP sent to your email!";
     }
 
     @Override
