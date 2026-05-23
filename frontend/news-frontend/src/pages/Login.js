@@ -28,15 +28,12 @@ function Login() {
 
         const data = response.data;
 
-        // Token check करो
-        // JWT Token "eyJ" ने सुरू होतो!
         if (!data.startsWith("eyJ")) {
             setIsError(true);
             setMessage(data);
             return;
         }
 
-        // Token save करो आणि Home ला जा
         localStorage.setItem("token", data);
         setIsError(false);
         navigate("/home");
