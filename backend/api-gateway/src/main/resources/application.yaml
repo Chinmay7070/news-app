@@ -30,3 +30,6 @@ spring:
               uri: http://localhost:8084
               predicates:
                 - Path=/api/payment/**
+
+jwt:
+  secret: newsapp_secret_key_which_is_very_long_for_security
