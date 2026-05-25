@@ -10,4 +10,6 @@ import java.util.List;
 public interface NewsRepository extends JpaRepository<News, Long> {
 
     List<News> findByCategory(String category);
+
+    boolean existsByTitle(String title);
 }
