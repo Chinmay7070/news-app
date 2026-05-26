@@ -10,9 +10,27 @@ function HomePage() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+
         if (!token) {
             navigate("/login");
+            return;
         }
+
+    
+        try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+
+            if (payload.exp < currentTime) {
+                localStorage.removeItem("token");
+                navigate("/login");
+                return;
+            }
+        } catch (error) {
+            localStorage.removeItem("token");
+            navigate("/login");
+        }
+
     }, []);
 
     return (
