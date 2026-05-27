@@ -12,4 +12,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findByCategory(String category);
 
     boolean existsByTitle(String title);
+
+    List<News> findByTitleContainingIgnoreCase(String keyword);
 }
