@@ -34,6 +34,14 @@ public class NewsServiceImpl implements InewsService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<NewsResponse> searchNews(String keyword) {
+        return newsRepository.findByTitleContainingIgnoreCase(keyword)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     private NewsResponse mapToResponse(News news){
         return NewsResponse.builder()
                 .id(news.getId())

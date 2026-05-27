@@ -10,4 +10,6 @@ public interface InewsService {
     public List<NewsResponse> getAllNews();
 
     public List<NewsResponse> getNewsByCategory(String category);
+
+    public List<NewsResponse> searchNews(String keyword);
 }
