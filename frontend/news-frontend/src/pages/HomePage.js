@@ -23,10 +23,27 @@ function HomePage() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+
         if (!token) {
             navigate("/login");
             return;
         }
+
+        try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+
+            if (payload.exp < currentTime) {
+                localStorage.removeItem("token");
+                navigate("/login");
+                return;
+            }
+        } catch (error) {
+            localStorage.removeItem("token");
+            navigate("/login");
+            return;
+        }
+
         fetchNews("all");
     }, []);
 
@@ -76,7 +93,6 @@ function HomePage() {
 
             <div className="home-content">
 
-                {/* Welcome Section */}
                 <div className="welcome-section">
                     <h2 className="welcome-title">Welcome to NewsApp! 👋</h2>
                     <p className="welcome-subtitle">
@@ -84,7 +100,6 @@ function HomePage() {
                     </p>
                 </div>
 
-                {/* Search + Category */}
                 <div className="search-container">
                     <input
                         type="text"
@@ -112,12 +127,10 @@ function HomePage() {
                     </select>
                 </div>
 
-                {/* Loading */}
                 {loading && (
                     <p className="loading-text">Loading news...</p>
                 )}
 
-                {/* News Grid */}
                 {!loading && (
                     <div className="news-grid">
                         {news.length === 0 ? (
@@ -125,18 +138,16 @@ function HomePage() {
                         ) : (
                             news.map((item) => (
                                 <div key={item.id} className="news-card">
-
-                                    
                                     {item.imageUrl && (
-                                    <img
-                                        src={item.imageUrl}
-                                        alt={item.title}
-                                        className="news-card-image"
-                                        onError={(e) => {
-                                            e.target.style.display = 'none';
-                                        }}
-                                    />
-                                )}
+                                        <img
+                                            src={item.imageUrl}
+                                            alt={item.title}
+                                            className="news-card-image"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                            }}
+                                        />
+                                    )}
                                     <span className="news-card-category">
                                         {item.category}
                                     </span>
