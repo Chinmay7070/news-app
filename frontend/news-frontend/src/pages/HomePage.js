@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 import Navbar from "../components/Navbar";
 import "../css/HomePage.css";
 
@@ -7,31 +8,66 @@ function HomePage() {
 
     const navigate = useNavigate();
     const [news, setNews] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState("all");
+    const [keyword, setKeyword] = useState("");
+
+    const categories = [
+        "all",
+        "technology",
+        "sports",
+        "business",
+        "health",
+        "entertainment"
+    ];
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
         if (!token) {
             navigate("/login");
             return;
         }
-
-    
-        try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            const currentTime = Math.floor(Date.now() / 1000);
-
-            if (payload.exp < currentTime) {
-                localStorage.removeItem("token");
-                navigate("/login");
-                return;
-            }
-        } catch (error) {
-            localStorage.removeItem("token");
-            navigate("/login");
-        }
-
+        fetchNews("all");
     }, []);
+
+    const fetchNews = async (category) => {
+        try {
+            setLoading(true);
+            let response;
+            if (category === "all") {
+                response = await api.get("/api/news/all");
+            } else {
+                response = await api.get(`/api/news/category/${category}`);
+            }
+            setNews(response.data);
+        } catch (error) {
+            console.log("Error:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCategoryChange = (e) => {
+        const category = e.target.value;
+        setSelectedCategory(category);
+        fetchNews(category);
+    };
+
+    const handleSearch = async () => {
+        if (!keyword.trim()) {
+            fetchNews(selectedCategory);
+            return;
+        }
+        try {
+            setLoading(true);
+            const response = await api.get(`/api/news/search?keyword=${keyword}`);
+            setNews(response.data);
+        } catch (error) {
+            console.log("Error:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="home-container">
@@ -40,6 +76,7 @@ function HomePage() {
 
             <div className="home-content">
 
+                {/* Welcome Section */}
                 <div className="welcome-section">
                     <h2 className="welcome-title">Welcome to NewsApp! 👋</h2>
                     <p className="welcome-subtitle">
@@ -47,62 +84,85 @@ function HomePage() {
                     </p>
                 </div>
 
-                <h3 className="news-section-title">Latest News</h3>
-
-                <div className="news-grid">
-
-                    <div className="news-card">
-                        <span className="news-card-category">Technology</span>
-                        <h4 className="news-card-title">
-                            AI is changing the world!
-                        </h4>
-                        <p className="news-card-description">
-                            Artificial Intelligence is transforming
-                            industries across the globe...
-                        </p>
-                        <div className="news-card-footer">
-                            <span className="news-card-source">TechCrunch</span>
-                            <button className="read-more-button">
-                                Read More
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="news-card">
-                        <span className="news-card-category">Sports</span>
-                        <h4 className="news-card-title">
-                            IPL 2025 Finals Today!
-                        </h4>
-                        <p className="news-card-description">
-                            Mumbai Indians vs Chennai Super Kings
-                            in the grand finale...
-                        </p>
-                        <div className="news-card-footer">
-                            <span className="news-card-source">ESPN</span>
-                            <button className="read-more-button">
-                                Read More
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="news-card">
-                        <span className="news-card-category">Business</span>
-                        <h4 className="news-card-title">
-                            Stock Market hits record high!
-                        </h4>
-                        <p className="news-card-description">
-                            Sensex crosses 80,000 mark for
-                            the first time in history...
-                        </p>
-                        <div className="news-card-footer">
-                            <span className="news-card-source">Bloomberg</span>
-                            <button className="read-more-button">
-                                Read More
-                            </button>
-                        </div>
-                    </div>
-
+                {/* Search + Category */}
+                <div className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Search news..."
+                        className="search-input"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
+                    <button
+                        className="search-button"
+                        onClick={handleSearch}
+                    >
+                        Search
+                    </button>
+                    <select
+                        className="category-select"
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                    >
+                        {categories.map((category) => (
+                            <option key={category} value={category}>
+                                {category.charAt(0).toUpperCase() + category.slice(1)}
+                            </option>
+                        ))}
+                    </select>
                 </div>
+
+                {/* Loading */}
+                {loading && (
+                    <p className="loading-text">Loading news...</p>
+                )}
+
+                {/* News Grid */}
+                {!loading && (
+                    <div className="news-grid">
+                        {news.length === 0 ? (
+                            <p className="no-news-text">No news found!</p>
+                        ) : (
+                            news.map((item) => (
+                                <div key={item.id} className="news-card">
+
+                                    
+                                    {item.imageUrl && (
+                                    <img
+                                        src={item.imageUrl}
+                                        alt={item.title}
+                                        className="news-card-image"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                        }}
+                                    />
+                                )}
+                                    <span className="news-card-category">
+                                        {item.category}
+                                    </span>
+                                    <h4 className="news-card-title">
+                                        {item.title}
+                                    </h4>
+                                    <p className="news-card-description">
+                                        {item.description}
+                                    </p>
+                                    <div className="news-card-footer">
+                                        <span className="news-card-source">
+                                            {item.source}
+                                        </span>
+                                        <button
+                                            className="read-more-button"
+                                            onClick={() => window.open(item.url, "_blank")}
+                                        >
+                                            Read More
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
+
             </div>
         </div>
     );
