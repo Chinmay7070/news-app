@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 import api from "../services/api";
 import "../css/Register.css";
 
 function Register() {
 
     const navigate = useNavigate();
+    const { isDark, toggleTheme } = useTheme();
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -18,11 +20,11 @@ function Register() {
     const handleRegister = async () => {
 
         if (!name || !email || !password) {
-        setIsError(true);
-        setMessage("All fields are required!");
-        return;
-    }
-    
+            setIsError(true);
+            setMessage("All fields are required!");
+            return;
+        }
+
         try {
             const response = await api.post("/api/user/register", {
                 name: name,
@@ -40,6 +42,13 @@ function Register() {
     };
 
     const handleVerifyOtp = async () => {
+
+        if (!otp) {
+            setIsError(true);
+            setMessage("Please enter OTP!");
+            return;
+        }
+
         try {
             const response = await api.post("/api/user/verify-otp", {
                 email: email,
@@ -62,7 +71,21 @@ function Register() {
         <div className="register-container">
             <div className="register-card">
 
-                <h2 className="register-logo">📰 NewsApp</h2>
+                {/* Theme Toggle */}
+                <div className="theme-toggle">
+                    <button
+                        className="theme-button"
+                        onClick={toggleTheme}
+                    >
+                        {isDark ? "☀️ Light" : "🌙 Dark"}
+                    </button>
+                </div>
+
+                {/* Logo */}
+                <div className="logo-container">
+                    <span className="logo-icon">📰</span>
+                    <h2 className="register-logo">NewsPulse</h2>
+                </div>
 
                 {!isOtpSent ? (
                     <>
