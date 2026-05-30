@@ -1,0 +1,27 @@
+/* Light Mode */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f0f4f8;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --accent-color: #1a73e8;
+    --accent-hover: #1558b0;
+    --border-color: #dddddd;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --input-bg: #ffffff;
+    --navbar-bg: #ffffff;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --accent-color: #4a9eff;
+    --accent-hover: #2196f3;
+    --border-color: #333333;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --input-bg: #0f3460;
+    --navbar-bg: #16213e;
+}

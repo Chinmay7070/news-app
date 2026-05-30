@@ -1,53 +1,69 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 import api from "../services/api";
 import "../css/Login.css";
 
 function Login() {
+
+    const navigate = useNavigate();
+    const { isDark, toggleTheme } = useTheme();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
 
-    const navigate = useNavigate();
+    const handleLogin = async () => {
 
-  const handleLogin = async () => {
-
-    if (!email || !password) {
-        setIsError(true);
-        setMessage("All fields are required!");
-        return;
-    }
-
-    try {
-        const response = await api.post("/api/user/login", {
-            email: email,
-            password: password
-        });
-
-        const data = response.data;
-
-        if (!data.startsWith("eyJ")) {
+        if (!email || !password) {
             setIsError(true);
-            setMessage(data);
+            setMessage("All fields are required!");
             return;
         }
 
-        localStorage.setItem("token", data);
-        setIsError(false);
-        navigate("/home");
+        try {
+            const response = await api.post("/api/user/login", {
+                email: email,
+                password: password
+            });
 
-    } catch (error) {
-        setIsError(true);
-        setMessage("Something went wrong!");
-    }
-};
+            const data = response.data;
+
+            if (!data.startsWith("eyJ")) {
+                setIsError(true);
+                setMessage(data);
+                return;
+            }
+
+            localStorage.setItem("token", data);
+            setIsError(false);
+            navigate("/home");
+
+        } catch (error) {
+            setIsError(true);
+            setMessage("Something went wrong!");
+        }
+    };
+
     return (
         <div className="login-container">
             <div className="login-card">
 
-                <h2 className="login-logo">📰 NewsApp</h2>
+                <div className="theme-toggle">
+                    <button
+                        className="theme-button"
+                        onClick={toggleTheme}
+                    >
+                        {isDark ? "☀️ Light" : "🌙 Dark"}
+                    </button>
+                </div>
+
+               
+                <div className="logo-container">
+                    <span className="logo-icon">📰</span>
+                    <h2 className="login-logo">NewsPulse</h2>
+                </div>
                 <p className="login-subtitle">Welcome back!</p>
 
                 <div className="input-group">
