@@ -69,7 +69,32 @@ function Register() {
 
     return (
         <div className="register-container">
-            <div className="register-card">
+
+            {/* Left Side */}
+            <div className="register-left">
+                <div className="register-left-content">
+                    <span className="register-left-icon">📰</span>
+                    <h1 className="register-left-title">NewsPulse</h1>
+                    <p className="register-left-subtitle">
+                        Join millions of readers who trust NewsPulse
+                        for their daily news. Create your account today!
+                    </p>
+                    <div className="register-features">
+                        <div className="feature-item">
+                            ✅ Free Account Forever
+                        </div>
+                        <div className="feature-item">
+                            ✅ AI Powered Recommendations
+                        </div>
+                        <div className="feature-item">
+                            ✅ Upgrade to Premium Anytime
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Side */}
+            <div className="register-right">
 
                 {/* Theme Toggle */}
                 <div className="theme-toggle">
@@ -81,114 +106,116 @@ function Register() {
                     </button>
                 </div>
 
-                {/* Logo */}
-                <div className="logo-container">
-                    <span className="logo-icon">📰</span>
-                    <h2 className="register-logo">NewsPulse</h2>
+                <div className="register-card">
+
+                    <div className="logo-container">
+                        <span className="logo-icon">📰</span>
+                        <h2 className="register-logo">NewsPulse</h2>
+                    </div>
+
+                    {!isOtpSent ? (
+                        <>
+                            <p className="register-subtitle">Create your account</p>
+
+                            <div className="input-group">
+                                <label className="input-label">Full Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter your name"
+                                    className="input-field"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">Email Address</label>
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="input-field"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">Password</label>
+                                <input
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    className="input-field"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+
+                            {message && (
+                                <p className={isError ? "message-error" : "message-success"}>
+                                    {message}
+                                </p>
+                            )}
+
+                            <button
+                                className="register-button"
+                                onClick={handleRegister}
+                            >
+                                Create Account
+                            </button>
+
+                            <p className="login-text">
+                                Already have an account?{" "}
+                                <span
+                                    className="login-link"
+                                    onClick={() => navigate("/login")}
+                                >
+                                    Login
+                                </span>
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <p className="register-subtitle">OTP sent to your email</p>
+                            <p className="otp-email">{email}</p>
+
+                            <div className="input-group">
+                                <label className="input-label">Enter OTP</label>
+                                <input
+                                    type="text"
+                                    placeholder="_ _ _ _ _ _"
+                                    className="input-field otp-input"
+                                    maxLength={6}
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                />
+                            </div>
+
+                            {message && (
+                                <p className={isError ? "message-error" : "message-success"}>
+                                    {message}
+                                </p>
+                            )}
+
+                            <button
+                                className="register-button"
+                                onClick={handleVerifyOtp}
+                            >
+                                Verify OTP
+                            </button>
+
+                            <p className="login-text">
+                                Already verified?{" "}
+                                <span
+                                    className="login-link"
+                                    onClick={() => navigate("/login")}
+                                >
+                                    Login
+                                </span>
+                            </p>
+                        </>
+                    )}
+
                 </div>
-
-                {!isOtpSent ? (
-                    <>
-                        <p className="register-subtitle">Create your account</p>
-
-                        <div className="input-group">
-                            <label className="input-label">Full Name</label>
-                            <input
-                                type="text"
-                                placeholder="Enter your name"
-                                className="input-field"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="input-group">
-                            <label className="input-label">Email Address</label>
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="input-field"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="input-group">
-                            <label className="input-label">Password</label>
-                            <input
-                                type="password"
-                                placeholder="Enter your password"
-                                className="input-field"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-
-                        {message && (
-                            <p className={isError ? "message-error" : "message-success"}>
-                                {message}
-                            </p>
-                        )}
-
-                        <button
-                            className="register-button"
-                            onClick={handleRegister}
-                        >
-                            Create Account
-                        </button>
-
-                        <p className="login-text">
-                            Already have an account?{" "}
-                            <span
-                                className="login-link"
-                                onClick={() => navigate("/login")}
-                            >
-                                Login
-                            </span>
-                        </p>
-                    </>
-                ) : (
-                    <>
-                        <p className="register-subtitle">OTP sent to your email</p>
-                        <p className="otp-email">{email}</p>
-
-                        <div className="input-group">
-                            <label className="input-label">Enter OTP</label>
-                            <input
-                                type="text"
-                                placeholder="_ _ _ _ _ _"
-                                className="input-field otp-input"
-                                maxLength={6}
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                            />
-                        </div>
-
-                        {message && (
-                            <p className={isError ? "message-error" : "message-success"}>
-                                {message}
-                            </p>
-                        )}
-
-                        <button
-                            className="register-button"
-                            onClick={handleVerifyOtp}
-                        >
-                            Verify OTP
-                        </button>
-
-                        <p className="login-text">
-                            Already verified?{" "}
-                            <span
-                                className="login-link"
-                                onClick={() => navigate("/login")}
-                            >
-                                Login
-                            </span>
-                        </p>
-                    </>
-                )}
-
             </div>
         </div>
     );
