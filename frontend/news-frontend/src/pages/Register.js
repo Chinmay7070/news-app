@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 import api from "../services/api";
 import "../css/Register.css";
 
 function Register() {
 
     const navigate = useNavigate();
+    const { isDark, toggleTheme } = useTheme();
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -18,11 +20,11 @@ function Register() {
     const handleRegister = async () => {
 
         if (!name || !email || !password) {
-        setIsError(true);
-        setMessage("All fields are required!");
-        return;
-    }
-    
+            setIsError(true);
+            setMessage("All fields are required!");
+            return;
+        }
+
         try {
             const response = await api.post("/api/user/register", {
                 name: name,
@@ -40,6 +42,13 @@ function Register() {
     };
 
     const handleVerifyOtp = async () => {
+
+        if (!otp) {
+            setIsError(true);
+            setMessage("Please enter OTP!");
+            return;
+        }
+
         try {
             const response = await api.post("/api/user/verify-otp", {
                 email: email,
@@ -60,112 +69,153 @@ function Register() {
 
     return (
         <div className="register-container">
-            <div className="register-card">
 
-                <h2 className="register-logo">📰 NewsApp</h2>
-
-                {!isOtpSent ? (
-                    <>
-                        <p className="register-subtitle">Create your account</p>
-
-                        <div className="input-group">
-                            <label className="input-label">Full Name</label>
-                            <input
-                                type="text"
-                                placeholder="Enter your name"
-                                className="input-field"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
+            {/* Left Side */}
+            <div className="register-left">
+                <div className="register-left-content">
+                    <span className="register-left-icon">📰</span>
+                    <h1 className="register-left-title">NewsPulse</h1>
+                    <p className="register-left-subtitle">
+                        Join millions of readers who trust NewsPulse
+                        for their daily news. Create your account today!
+                    </p>
+                    <div className="register-features">
+                        <div className="feature-item">
+                            ✅ Free Account Forever
                         </div>
-
-                        <div className="input-group">
-                            <label className="input-label">Email Address</label>
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="input-field"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                        <div className="feature-item">
+                            ✅ AI Powered Recommendations
                         </div>
-
-                        <div className="input-group">
-                            <label className="input-label">Password</label>
-                            <input
-                                type="password"
-                                placeholder="Enter your password"
-                                className="input-field"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                        <div className="feature-item">
+                            ✅ Upgrade to Premium Anytime
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        {message && (
-                            <p className={isError ? "message-error" : "message-success"}>
-                                {message}
-                            </p>
-                        )}
+            {/* Right Side */}
+            <div className="register-right">
 
-                        <button
-                            className="register-button"
-                            onClick={handleRegister}
-                        >
-                            Create Account
-                        </button>
+                {/* Theme Toggle */}
+                <div className="theme-toggle">
+                    <button
+                        className="theme-button"
+                        onClick={toggleTheme}
+                    >
+                        {isDark ? "☀️ Light" : "🌙 Dark"}
+                    </button>
+                </div>
 
-                        <p className="login-text">
-                            Already have an account?{" "}
-                            <span
-                                className="login-link"
-                                onClick={() => navigate("/login")}
+                <div className="register-card">
+
+                    <div className="logo-container">
+                        <span className="logo-icon">📰</span>
+                        <h2 className="register-logo">NewsPulse</h2>
+                    </div>
+
+                    {!isOtpSent ? (
+                        <>
+                            <p className="register-subtitle">Create your account</p>
+
+                            <div className="input-group">
+                                <label className="input-label">Full Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter your name"
+                                    className="input-field"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">Email Address</label>
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="input-field"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">Password</label>
+                                <input
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    className="input-field"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+
+                            {message && (
+                                <p className={isError ? "message-error" : "message-success"}>
+                                    {message}
+                                </p>
+                            )}
+
+                            <button
+                                className="register-button"
+                                onClick={handleRegister}
                             >
-                                Login
-                            </span>
-                        </p>
-                    </>
-                ) : (
-                    <>
-                        <p className="register-subtitle">OTP sent to your email</p>
-                        <p className="otp-email">{email}</p>
+                                Create Account
+                            </button>
 
-                        <div className="input-group">
-                            <label className="input-label">Enter OTP</label>
-                            <input
-                                type="text"
-                                placeholder="_ _ _ _ _ _"
-                                className="input-field otp-input"
-                                maxLength={6}
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                            />
-                        </div>
-
-                        {message && (
-                            <p className={isError ? "message-error" : "message-success"}>
-                                {message}
+                            <p className="login-text">
+                                Already have an account?{" "}
+                                <span
+                                    className="login-link"
+                                    onClick={() => navigate("/login")}
+                                >
+                                    Login
+                                </span>
                             </p>
-                        )}
+                        </>
+                    ) : (
+                        <>
+                            <p className="register-subtitle">OTP sent to your email</p>
+                            <p className="otp-email">{email}</p>
 
-                        <button
-                            className="register-button"
-                            onClick={handleVerifyOtp}
-                        >
-                            Verify OTP
-                        </button>
+                            <div className="input-group">
+                                <label className="input-label">Enter OTP</label>
+                                <input
+                                    type="text"
+                                    placeholder="_ _ _ _ _ _"
+                                    className="input-field otp-input"
+                                    maxLength={6}
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                />
+                            </div>
 
-                        <p className="login-text">
-                            Already verified?{" "}
-                            <span
-                                className="login-link"
-                                onClick={() => navigate("/login")}
+                            {message && (
+                                <p className={isError ? "message-error" : "message-success"}>
+                                    {message}
+                                </p>
+                            )}
+
+                            <button
+                                className="register-button"
+                                onClick={handleVerifyOtp}
                             >
-                                Login
-                            </span>
-                        </p>
-                    </>
-                )}
+                                Verify OTP
+                            </button>
 
+                            <p className="login-text">
+                                Already verified?{" "}
+                                <span
+                                    className="login-link"
+                                    onClick={() => navigate("/login")}
+                                >
+                                    Login
+                                </span>
+                            </p>
+                        </>
+                    )}
+
+                </div>
             </div>
         </div>
     );

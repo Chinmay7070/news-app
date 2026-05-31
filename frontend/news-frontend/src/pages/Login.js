@@ -48,8 +48,34 @@ function Login() {
 
     return (
         <div className="login-container">
-            <div className="login-card">
 
+            {/* Left Side */}
+            <div className="login-left">
+                <div className="login-left-content">
+                    <span className="login-left-icon">📰</span>
+                    <h1 className="login-left-title">NewsPulse</h1>
+                    <p className="login-left-subtitle">
+                        Stay informed with the latest news from around the world.
+                        Your personalized news experience starts here.
+                    </p>
+                    <div className="login-features">
+                        <div className="feature-item">
+                            ✅ Personalized News Feed
+                        </div>
+                        <div className="feature-item">
+                            ✅ AI Recommendations
+                        </div>
+                        <div className="feature-item">
+                            ✅ Real-time Updates
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Side */}
+            <div className="login-right">
+
+                {/* Theme Toggle */}
                 <div className="theme-toggle">
                     <button
                         className="theme-button"
@@ -59,58 +85,60 @@ function Login() {
                     </button>
                 </div>
 
-               
-                <div className="logo-container">
-                    <span className="logo-icon">📰</span>
-                    <h2 className="login-logo">NewsPulse</h2>
-                </div>
-                <p className="login-subtitle">Welcome back!</p>
+                <div className="login-card">
 
-                <div className="input-group">
-                    <label className="input-label">Email Address</label>
-                    <input
-                        type="email"
-                        placeholder="Enter your email"
-                        className="input-field"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
+                    <div className="logo-container">
+                        <span className="logo-icon">📰</span>
+                        <h2 className="login-logo">NewsPulse</h2>
+                    </div>
+                    <p className="login-subtitle">Welcome back!</p>
 
-                <div className="input-group">
-                    <label className="input-label">Password</label>
-                    <input
-                        type="password"
-                        placeholder="Enter your password"
-                        className="input-field"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
+                    <div className="input-group">
+                        <label className="input-label">Email Address</label>
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            className="input-field"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
 
-                {message && (
-                    <p className={isError ? "message-error" : "message-success"}>
-                        {message}
-                    </p>
-                )}
+                    <div className="input-group">
+                        <label className="input-label">Password</label>
+                        <input
+                            type="password"
+                            placeholder="Enter your password"
+                            className="input-field"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
 
-                <button
-                    className="login-button"
-                    onClick={handleLogin}
-                >
-                    Login
-                </button>
+                    {message && (
+                        <p className={isError ? "message-error" : "message-success"}>
+                            {message}
+                        </p>
+                    )}
 
-                <p className="register-text">
-                    Don't have an account?{" "}
-                    <span
-                        className="register-link"
-                        onClick={() => navigate("/register")}
+                    <button
+                        className="login-button"
+                        onClick={handleLogin}
                     >
-                        Register
-                    </span>
-                </p>
+                        Login
+                    </button>
 
+                    <p className="register-text">
+                        Don't have an account?{" "}
+                        <span
+                            className="register-link"
+                            onClick={() => navigate("/register")}
+                        >
+                            Register
+                        </span>
+                    </p>
+
+                </div>
             </div>
         </div>
     );
