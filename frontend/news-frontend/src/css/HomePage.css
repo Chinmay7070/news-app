@@ -1,104 +1,50 @@
 .home-container {
     min-height: 100vh;
-    background-color: #f0f4f8;
+    background-color: var(--bg-secondary);
+    transition: background-color 0.3s ease;
 }
 
 .home-content {
-    padding: 32px;
+    padding: 24px 32px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.welcome-section {
-    background-color: #ffffff;
-    padding: 24px 32px;
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    padding: 32px;
     border-radius: 16px;
-    border: 0.5px solid #ddd;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
-.welcome-title {
-    color: #1a73e8;
+.hero-title {
+    color: #ffffff;
     font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.welcome-subtitle {
-    color: #666;
-    font-size: 14px;
-    margin: 0;
-}
-
-.news-section-title {
-    color: #333;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 16px;
-}
-
-.news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.news-card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    border: 0.5px solid #ddd;
-}
-
-.news-card-category {
-    display: inline-block;
-    padding: 4px 12px;
-    background-color: #e8f0fe;
-    color: #1a73e8;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    margin-bottom: 12px;
-}
-
-.news-card-title {
-    color: #333;
-    font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
     margin-bottom: 8px;
 }
 
-.news-card-description {
-    color: #666;
+.hero-subtitle {
+    color: #c7d2fe;
     font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 
-.news-card-footer {
+.hero-stats {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 16px;
 }
 
-.news-card-source {
-    color: #999;
-    font-size: 12px;
-}
-
-.read-more-button {
-    padding: 6px 16px;
-    background-color: #1a73e8;
+.hero-stat {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 20px;
     color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 12px;
-    cursor: pointer;
+    font-size: 13px;
 }
 
-.read-more-button:hover {
-    background-color: #1558b0;
-}
+/* Search Section */
 .search-container {
     display: flex;
     gap: 12px;
@@ -110,62 +56,167 @@
     flex: 1;
     padding: 12px 16px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     font-size: 14px;
     outline: none;
     box-sizing: border-box;
+    transition: border-color 0.3s ease;
 }
 
 .search-input:focus {
-    border-color: #1a73e8;
+    border-color: var(--accent-color);
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
 }
 
 .search-button {
     padding: 12px 24px;
-    background-color: #1a73e8;
+    background-color: var(--accent-color);
     color: #ffffff;
     border: none;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .search-button:hover {
-    background-color: #1558b0;
+    background-color: var(--accent-hover);
 }
 
 .category-select {
     padding: 12px 16px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     font-size: 14px;
     outline: none;
     cursor: pointer;
-    background-color: #ffffff;
-    color: #333;
+    transition: border-color 0.3s ease;
 }
 
 .category-select:focus {
-    border-color: #1a73e8;
+    border-color: var(--accent-color);
+}
+
+/* News Section */
+.news-section-title {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
 }
 
 .loading-text {
     text-align: center;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
     margin-top: 24px;
 }
 
 .no-news-text {
     text-align: center;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
 }
+
+/* News Grid */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* News Card */
+.news-card {
+    background-color: var(--bg-primary);
+    border-radius: 12px;
+    border: 0.5px solid var(--border-color);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow);
+}
+
 .news-card-image {
     width: 100%;
     height: 180px;
     object-fit: cover;
-    border-radius: 8px;
+}
+
+.news-card-placeholder {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.news-card-body {
+    padding: 16px;
+}
+
+.news-card-category {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+.news-card-title {
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.news-card-description {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
     margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.news-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.news-card-source {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.read-more-button {
+    padding: 6px 14px;
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.read-more-button:hover {
+    background-color: var(--accent-hover);
 }
