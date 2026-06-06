@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaLaptop, FaFootballBall, FaChartLine, FaHeartbeat, FaFilm } from "react-icons/fa";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
 import "../css/HomePage.css";
@@ -20,6 +21,23 @@ function HomePage() {
         "health",
         "entertainment"
     ];
+
+    const categoryColors = {
+        technology: { bg: "#ede9fe", color: "#4f46e5" },
+        sports: { bg: "#d1fae5", color: "#059669" },
+        business: { bg: "#fef3c7", color: "#d97706" },
+        health: { bg: "#fee2e2", color: "#dc2626" },
+        entertainment: { bg: "#fce7f3", color: "#db2777" },
+        all: { bg: "#ede9fe", color: "#4f46e5" }
+    };
+
+    const categoryIcons = {
+        technology: <FaLaptop size={32} color="#ffffff" />,
+        sports: <FaFootballBall size={32} color="#ffffff" />,
+        business: <FaChartLine size={32} color="#ffffff" />,
+        health: <FaHeartbeat size={32} color="#ffffff" />,
+        entertainment: <FaFilm size={32} color="#ffffff" />
+    };
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -77,6 +95,7 @@ function HomePage() {
         }
         try {
             setLoading(true);
+            setSelectedCategory("all");
             const response = await api.get(`/api/news/search?keyword=${keyword}`);
             setNews(response.data);
         } catch (error) {
@@ -93,13 +112,25 @@ function HomePage() {
 
             <div className="home-content">
 
-                <div className="welcome-section">
-                    <h2 className="welcome-title">Welcome to NewsApp! 👋</h2>
-                    <p className="welcome-subtitle">
-                        Stay updated with the latest news!
-                    </p>
+                {/* Hero Section */}
+                <div className="hero-section">
+                    <div className="hero-content">
+                        <h2 className="hero-title">Good Morning! 👋</h2>
+                        <p className="hero-subtitle">
+                            Stay updated with today's top stories
+                        </p>
+                        <div className="hero-stats">
+                            <div className="hero-stat">
+                                📰 {news.length} Articles
+                            </div>
+                            <div className="hero-stat">
+                                🔥 Trending Now
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                {/* Search + Category */}
                 <div className="search-container">
                     <input
                         type="text"
@@ -127,10 +158,17 @@ function HomePage() {
                     </select>
                 </div>
 
+                {/* News Section Title */}
+                <h3 className="news-section-title">
+                    {selectedCategory === "all" ? "Latest News" : `${selectedCategory} News`}
+                </h3>
+
+                {/* Loading */}
                 {loading && (
                     <p className="loading-text">Loading news...</p>
                 )}
 
+                {/* News Grid */}
                 {!loading && (
                     <div className="news-grid">
                         {news.length === 0 ? (
@@ -138,36 +176,63 @@ function HomePage() {
                         ) : (
                             news.map((item) => (
                                 <div key={item.id} className="news-card">
-                                    {item.imageUrl && (
+
+                                    {/* Image */}
+                                    {item.imageUrl ? (
                                         <img
                                             src={item.imageUrl}
                                             alt={item.title}
                                             className="news-card-image"
                                             onError={(e) => {
                                                 e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
                                             }}
                                         />
-                                    )}
-                                    <span className="news-card-category">
-                                        {item.category}
-                                    </span>
-                                    <h4 className="news-card-title">
-                                        {item.title}
-                                    </h4>
-                                    <p className="news-card-description">
-                                        {item.description}
-                                    </p>
-                                    <div className="news-card-footer">
-                                        <span className="news-card-source">
-                                            {item.source}
-                                        </span>
-                                        <button
-                                            className="read-more-button"
-                                            onClick={() => window.open(item.url, "_blank")}
-                                        >
-                                            Read More
-                                        </button>
+                                    ) : null}
+
+                                    {/* Placeholder */}
+                                    <div
+                                        className="news-card-placeholder"
+                                        style={{
+                                            display: item.imageUrl ? 'none' : 'flex',
+                                            background: `linear-gradient(135deg, ${categoryColors[item.category]?.color || '#4f46e5'}, #7c3aed)`
+                                        }}
+                                    >
+                                        {categoryIcons[item.category]}
                                     </div>
+
+                                    <div className="news-card-body">
+                                        <span
+                                            className="news-card-category"
+                                            style={{
+                                                backgroundColor: categoryColors[item.category]?.bg || '#ede9fe',
+                                                color: categoryColors[item.category]?.color || '#4f46e5'
+                                            }}
+                                        >
+                                            {item.category}
+                                        </span>
+
+                                        <h4 className="news-card-title">
+                                            {item.title}
+                                        </h4>
+
+                                        <p className="news-card-description">
+                                            {item.description}
+                                        </p>
+
+                                        <div className="news-card-footer">
+                                            <span className="news-card-source">
+                                                {item.source}
+                                            </span>
+                                            <button
+                                                className="read-more-button"
+                                                onClick={() => window.open(item.url, "_blank")}
+                                            >
+                                                Read More
+                                            </button>
+                                        </div>
+                                    </div>
+
                                 </div>
                             ))
                         )}
